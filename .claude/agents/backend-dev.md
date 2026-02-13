@@ -335,7 +335,7 @@ npm install zod
 
 **Warum?** Verhindert Missbrauch und DDoS Attacks.
 
-**Einfache Implementierung (Vercel):**
+**Einfache Implementierung (Netlify):**
 
 ```typescript
 // middleware.ts
@@ -357,7 +357,7 @@ export async function middleware(request: Request) {
 }
 ```
 
-**Kostenlose Alternative:** Vercel Edge Config (built-in Rate Limiting)
+**Kostenlose Alternative:** Netlify Edge Functions (built-in Rate Limiting)
 
 ---
 

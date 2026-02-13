@@ -107,7 +107,7 @@ in /features/PROJ-1-kanban-board.md.
 ```markdown
 Hey Claude, lies .claude/agents/devops.md und handle danach.
 
-Deploy das Projekt zu Vercel (Production).
+Deploy das Projekt zu Netlify (Production).
 ```
 
 ---
@@ -286,7 +286,7 @@ Teste PROJ-1 gegen Acceptance Criteria.
 ```
 Hey Claude, lies .claude/agents/devops.md und handle danach.
 
-Deploy zu Vercel.
+Deploy zu Netlify.
 ```
 
 **Output:** Production URL

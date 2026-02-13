@@ -2,7 +2,11 @@
 
 ## Tech Stack
 
-| Technology       | Version | Purpose                        |
+| Technology       | Version | Purpose        
+
+Die European FinTech Database ist eine nicht-öffentliche Web-App für das HoFT (House of Finance & Tech Berlin), mit der Nutzer über 10.000 europäische
+ FinTech-Unternehmen durchsuchen, filtern und vergleichen können.
+
 | ---------------- | ------- | ------------------------------ |
 | Next.js          | 16.1.6  | React framework (App Router)   |
 | React            | 19.2.3  | UI library                     |
@@ -36,6 +40,13 @@ my-first-app/
 
 Copy `.env.local.example` to `.env.local` and fill in your Supabase credentials:
 
+https://vntbbygllfhrokmogfpw.supabase.co
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudGJieWdsbGZocm9rbW9nZnB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NDQ0MDQsImV4cCI6MjA4NjIyMDQwNH0.lsYpIzELeNyPvSmZ6UMxU1e6VrU_9OORU8IbQ1VepGw
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudGJieWdsbGZocm9rbW9nZnB3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDY0NDQwNCwiZXhwIjoyMDg2MjIwNDA0fQ.mKZiDVGvPa1q-BmG6bwLtI6tYaoNT0iDXJ1t5O4N9Eo
+
+
 ```bash
 cp .env.local.example .env.local
 ```
@@ -54,7 +65,7 @@ You can find these values in your Supabase dashboard under **Settings > API**.
 3. **Build components** — Add reusable UI components in `src/components/`
 4. **Add pages** — Create routes under `src/app/` using the App Router conventions
 5. **Add authentication** — Use `@supabase/ssr` for server-side auth if needed
-6. **Deploy** — Deploy to Vercel with `npx vercel`
+6. **Deploy** — Deploy to Netlify with `npx netlify deploy`
 
 ## Available Scripts
 

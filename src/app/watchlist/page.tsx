@@ -1,0 +1,245 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import { FinTechCompany } from "@/types/fintech";
+import { useFavorites } from "@/lib/favorites-context";
+import { countryToIso } from "@/lib/country-flags";
+import Header from "@/components/Header";
+import StarButton from "@/components/StarButton";
+import CompanyDetailModal from "@/components/CompanyDetailModal";
+import { Download, Star } from "lucide-react";
+import * as XLSX from "xlsx";
+
+function formatFunding(value: number | null): string {
+  if (value == null || value === 0) return "-";
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(1)}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
+  return `$${value.toFixed(0)}`;
+}
+
+function formatYear(value: number | null): string {
+  if (value == null) return "-";
+  return value.toString();
+}
+
+export default function WatchlistPage() {
+  const { favoriteIds, count, loading: favLoading } = useFavorites();
+  const [companies, setCompanies] = useState<FinTechCompany[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCompany, setSelectedCompany] =
+    useState<FinTechCompany | null>(null);
+
+  // Load companies matching favorite IDs
+  useEffect(() => {
+    if (favLoading) return;
+
+    if (favoriteIds.size === 0) {
+      setCompanies([]);
+      setLoading(false);
+      return;
+    }
+
+    async function loadWatchlist() {
+      setLoading(true);
+      const ids = [...favoriteIds];
+      const { data } = await supabase
+        .from("FinWell_data")
+        .select("*")
+        .in("id", ids)
+        .order("company_name");
+
+      setCompanies(data ?? []);
+      setLoading(false);
+    }
+
+    loadWatchlist();
+  }, [favoriteIds, favLoading]);
+
+  function handleExport() {
+    if (companies.length === 0) return;
+
+    const rows = companies.map((c) => ({
+      "Company Name": c.company_name ?? "",
+      Category: c.category_1 ?? "",
+      Subcategory: c.subcategory_1 ?? "",
+      Country: c.country ?? "",
+      Founded: c.founded_year ?? "",
+      "Total Funding": c.total_funding ?? "",
+      Employees: c.number_of_employees ?? "",
+      Status: c.company_status ?? "",
+      "Target Model": c.target_model ?? "",
+      Domain: c.domain ?? "",
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Watchlist");
+
+    const today = new Date().toISOString().split("T")[0];
+    XLSX.writeFile(wb, `HoFT_Watchlist_${today}.xlsx`);
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="mx-auto max-w-7xl px-6 py-6">
+        {/* Header row */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Watchlist</h2>
+            <p className="mt-1 text-sm text-muted">
+              {count} {count === 1 ? "Company" : "Companies"} in deiner
+              Watchlist
+            </p>
+          </div>
+          <button
+            onClick={handleExport}
+            disabled={companies.length === 0}
+            className="flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="h-4 w-4" />
+            Export as Excel
+          </button>
+        </div>
+
+        {/* Loading */}
+        {(loading || favLoading) && (
+          <div className="flex items-center justify-center py-20">
+            <div className="flex items-center gap-3 text-muted">
+              <svg
+                className="h-5 w-5 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              Loading watchlist...
+            </div>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && !favLoading && companies.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 text-muted">
+            <Star className="mb-4 h-12 w-12 opacity-30" />
+            <p className="text-lg font-medium text-foreground">
+              Deine Watchlist ist noch leer
+            </p>
+            <p className="mt-1 text-sm">
+              Klicke auf den Stern bei einem Unternehmen, um es hier zu
+              speichern.
+            </p>
+            <a
+              href="/"
+              className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
+            >
+              Zur Datenbank
+            </a>
+          </div>
+        )}
+
+        {/* Table */}
+        {!loading && !favLoading && companies.length > 0 && (
+          <div className="overflow-x-auto rounded-lg border border-border">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-border bg-surface">
+                  <th className="w-10 px-3 py-3" />
+                  <th className="px-4 py-3 font-semibold text-foreground">
+                    Company
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-foreground">
+                    Category
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-foreground">
+                    Country
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-foreground">
+                    Founded
+                  </th>
+                  <th className="px-4 py-3 text-right font-semibold text-foreground">
+                    Total Funding
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-foreground">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {companies.map((company) => (
+                  <tr
+                    key={company.id}
+                    onClick={() => setSelectedCompany(company)}
+                    className="cursor-pointer border-b border-border transition-colors hover:bg-teal/5 last:border-b-0"
+                  >
+                    <td className="px-3 py-3">
+                      <StarButton companyId={company.id} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="font-medium text-foreground">
+                        {company.company_name ?? "-"}
+                      </span>
+                      {company.domain && (
+                        <span className="ml-2 text-xs text-muted">
+                          {company.domain}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-muted">
+                      {company.category_1 ?? "-"}
+                    </td>
+                    <td className="px-4 py-3 text-muted">
+                      {company.country ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          {countryToIso(company.country) && (
+                            <span
+                              className={`fi fi-${countryToIso(company.country)}`}
+                            />
+                          )}
+                          {company.country}
+                        </span>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-muted">
+                      {formatYear(company.founded_year)}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-sm">
+                      {formatFunding(company.total_funding)}
+                    </td>
+                    <td className="px-4 py-3 text-muted">
+                      {company.company_status ?? "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </main>
+
+      {selectedCompany && (
+        <CompanyDetailModal
+          company={selectedCompany}
+          onClose={() => setSelectedCompany(null)}
+        />
+      )}
+    </div>
+  );
+}
