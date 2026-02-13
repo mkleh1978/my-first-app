@@ -16,6 +16,11 @@ export default function RegisterPage() {
     e.preventDefault();
     setError(null);
 
+    if (!email.toLowerCase().endsWith("@hoft.berlin")) {
+      setError("Registrierung ist nur mit einer @hoft.berlin-Adresse möglich.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwörter stimmen nicht überein.");
       return;
@@ -107,7 +112,7 @@ export default function RegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
-            placeholder="name@beispiel.de"
+            placeholder="name@hoft.berlin"
           />
         </div>
 
