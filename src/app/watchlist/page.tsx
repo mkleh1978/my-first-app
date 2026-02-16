@@ -47,7 +47,7 @@ export default function WatchlistPage() {
       setLoading(true);
       const ids = [...favoriteIds];
       const { data } = await supabase
-        .from("FinWell_data")
+        .from("company_data_view")
         .select("*")
         .in("id", ids)
         .order("company_name");

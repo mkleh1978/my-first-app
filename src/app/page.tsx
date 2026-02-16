@@ -17,6 +17,7 @@ import CompanyTable from "@/components/CompanyTable";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
 import Header from "@/components/Header";
 import { Star } from "lucide-react";
+import { sanitizeSearchInput } from "@/lib/sanitize";
 
 const PAGE_SIZE = 50;
 
@@ -97,7 +98,7 @@ export default function Home() {
     async (currentFilters: Filters, currentPage: number, currentSort: SortConfig) => {
       setLoading(true);
 
-      let query = supabase.from("FinWell_data").select(
+      let query = supabase.from("company_data_view").select(
         `id, company_name, domain, description_en,
          category_1, subcategory_1, category_2, subcategory_2, category_3, subcategory_3,
          headquarters, city, country, region, founded_year,
@@ -117,8 +118,9 @@ export default function Home() {
 
       // Apply filters
       if (currentFilters.search) {
+        const safe = sanitizeSearchInput(currentFilters.search);
         query = query.or(
-          `company_name.ilike.%${currentFilters.search}%,domain.ilike.%${currentFilters.search}%,description_en.ilike.%${currentFilters.search}%`
+          `company_name.ilike.%${safe}%,domain.ilike.%${safe}%,description_en.ilike.%${safe}%`
         );
       }
       if (currentFilters.category) {
@@ -231,8 +233,9 @@ export default function Home() {
       let query = supabase.from("FinWell_data").select("id");
 
       if (filters.search) {
+        const safe = sanitizeSearchInput(filters.search);
         query = query.or(
-          `company_name.ilike.%${filters.search}%,domain.ilike.%${filters.search}%,description_en.ilike.%${filters.search}%`
+          `company_name.ilike.%${safe}%,domain.ilike.%${safe}%,description_en.ilike.%${safe}%`
         );
       }
       if (filters.category) query = query.eq("category_1", filters.category);

@@ -140,18 +140,26 @@ export async function importContacts(
       }
     }
 
-    // Execute batch updates
-    for (const update of updates) {
-      const { id, ...fields } = update;
-      const { error: updateError } = await supabase
-        .from("FinWell_data")
-        .update(fields)
-        .eq("id", id);
+    // Execute batch updates in parallel (10 concurrent)
+    const CONCURRENCY = 10;
+    for (let j = 0; j < updates.length; j += CONCURRENCY) {
+      const chunk = updates.slice(j, j + CONCURRENCY);
+      const results = await Promise.all(
+        chunk.map(({ id, ...fields }) =>
+          supabase
+            .from("FinWell_data")
+            .update(fields)
+            .eq("id", id)
+            .then(({ error: updateError }) => ({ id, updateError }))
+        )
+      );
 
-      if (updateError) {
-        result.errors.push(`${id}: ${updateError.message}`);
-      } else {
-        result.updated++;
+      for (const { id, updateError } of results) {
+        if (updateError) {
+          result.errors.push(`${id}: ${updateError.message}`);
+        } else {
+          result.updated++;
+        }
       }
     }
 
