@@ -10,10 +10,13 @@ import {
   DEFAULT_SORT,
   TEXT_SORT_COLUMNS,
 } from "@/types/fintech";
+import { useAuth } from "@/lib/auth-context";
+import { useFavorites } from "@/lib/favorites-context";
 import FilterPanel from "@/components/FilterPanel";
 import CompanyTable from "@/components/CompanyTable";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
 import Header from "@/components/Header";
+import { Star } from "lucide-react";
 
 const PAGE_SIZE = 50;
 
@@ -41,7 +44,11 @@ export default function Home() {
   );
   const [sort, setSort] = useState<SortConfig>(DEFAULT_SORT);
   const [error, setError] = useState<string | null>(null);
+  const [bulkAdding, setBulkAdding] = useState(false);
+  const [bulkResult, setBulkResult] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { isAdmin } = useAuth();
+  const { bulkAddFavorites } = useFavorites();
 
   // Load country list once
   useEffect(() => {
@@ -212,6 +219,50 @@ export default function Home() {
     });
   }
 
+  // Bulk-add filtered companies to watchlist (admin only, max 500)
+  const BULK_LIMIT = 500;
+
+  async function handleBulkAdd() {
+    setBulkAdding(true);
+    setBulkResult(null);
+
+    try {
+      // Build same filter query but only fetch IDs, no pagination, limit 500
+      let query = supabase.from("FinWell_data").select("id");
+
+      if (filters.search) {
+        query = query.or(
+          `company_name.ilike.%${filters.search}%,domain.ilike.%${filters.search}%,description_en.ilike.%${filters.search}%`
+        );
+      }
+      if (filters.category) query = query.eq("category_1", filters.category);
+      if (filters.subcategory) query = query.eq("subcategory_1", filters.subcategory);
+      if (filters.country) query = query.eq("country", filters.country);
+      if (filters.status) query = query.eq("company_status", filters.status);
+      if (filters.targetModel) query = query.eq("target_model", filters.targetModel);
+      if (filters.memberOnly) query = query.eq("member", true);
+
+      query = query.limit(BULK_LIMIT);
+
+      const { data, error: queryError } = await query;
+      if (queryError) throw new Error(queryError.message);
+
+      const ids = (data ?? []).map((r: { id: string }) => r.id);
+      const added = await bulkAddFavorites(ids);
+
+      setBulkResult(
+        added > 0
+          ? `${added} Companies zur Watchlist hinzugefügt`
+          : "Alle Companies sind bereits in der Watchlist"
+      );
+    } catch (err) {
+      setBulkResult(`Fehler: ${err instanceof Error ? err.message : "Unbekannter Fehler"}`);
+    } finally {
+      setBulkAdding(false);
+      setTimeout(() => setBulkResult(null), 4000);
+    }
+  }
+
   // Close modal on Escape
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -237,6 +288,30 @@ export default function Home() {
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
+
+          {/* Bulk-add to watchlist (admin only) */}
+          {isAdmin && !loading && filteredCount > 0 && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleBulkAdd}
+                disabled={bulkAdding || filteredCount > BULK_LIMIT}
+                className="inline-flex items-center gap-2 rounded-lg border border-teal/30 bg-teal/10 px-4 py-2 text-sm font-medium text-teal transition-colors hover:bg-teal/20 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Star className="h-4 w-4" />
+                {bulkAdding
+                  ? "Wird hinzugefügt..."
+                  : `Alle ${filteredCount > BULK_LIMIT ? filteredCount : filteredCount} zur Watchlist`}
+              </button>
+              {filteredCount > BULK_LIMIT && (
+                <span className="text-xs text-muted">
+                  Max. {BULK_LIMIT} Companies auf einmal (aktuell {filteredCount.toLocaleString()})
+                </span>
+              )}
+              {bulkResult && (
+                <span className="text-sm text-teal">{bulkResult}</span>
+              )}
+            </div>
+          )}
 
           {/* Table */}
           <CompanyTable

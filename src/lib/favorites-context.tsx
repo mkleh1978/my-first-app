@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth-context";
 interface FavoritesContextType {
   favoriteIds: Set<string>;
   toggleFavorite: (companyId: string) => void;
+  bulkAddFavorites: (companyIds: string[]) => Promise<number>;
   isFavorite: (companyId: string) => boolean;
   count: number;
   loading: boolean;
@@ -21,6 +22,7 @@ interface FavoritesContextType {
 const FavoritesContext = createContext<FavoritesContextType>({
   favoriteIds: new Set(),
   toggleFavorite: () => {},
+  bulkAddFavorites: async () => 0,
   isFavorite: () => false,
   count: 0,
   loading: true,
@@ -103,6 +105,52 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     [user, favoriteIds]
   );
 
+  const bulkAddFavorites = useCallback(
+    async (companyIds: string[]): Promise<number> => {
+      if (!user || companyIds.length === 0) return 0;
+
+      const newIds = companyIds.filter((id) => !favoriteIds.has(id));
+      if (newIds.length === 0) return 0;
+
+      // Optimistic update
+      setFavoriteIds((prev) => {
+        const next = new Set(prev);
+        for (const id of newIds) next.add(id);
+        return next;
+      });
+
+      // Upsert in batches (Supabase max ~500 rows per insert)
+      const BATCH = 500;
+      let addedCount = 0;
+
+      for (let i = 0; i < newIds.length; i += BATCH) {
+        const batch = newIds.slice(i, i + BATCH).map((company_id) => ({
+          user_id: user.id,
+          company_id,
+        }));
+
+        const { error } = await supabase
+          .from("watchlist")
+          .upsert(batch, { onConflict: "user_id,company_id" });
+
+        if (error) {
+          // Revert on error
+          setFavoriteIds((prev) => {
+            const next = new Set(prev);
+            for (const id of newIds) next.delete(id);
+            return next;
+          });
+          throw new Error(error.message);
+        }
+
+        addedCount += batch.length;
+      }
+
+      return addedCount;
+    },
+    [user, favoriteIds]
+  );
+
   const isFavorite = useCallback(
     (companyId: string) => favoriteIds.has(companyId),
     [favoriteIds]
@@ -113,6 +161,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       value={{
         favoriteIds,
         toggleFavorite,
+        bulkAddFavorites,
         isFavorite,
         count: favoriteIds.size,
         loading,
