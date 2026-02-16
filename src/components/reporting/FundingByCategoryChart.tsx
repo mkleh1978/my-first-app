@@ -25,7 +25,7 @@ export default function FundingByCategoryChart({
   if (stats.length === 0 || stats.every((s) => s.total_funding_sum === 0)) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-background py-12">
-        <p className="text-sm text-muted">Keine Finanzierungsdaten verfügbar</p>
+        <p className="text-sm text-muted">No funding data available</p>
       </div>
     );
   }
@@ -42,7 +42,7 @@ export default function FundingByCategoryChart({
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Gesamtfinanzierung nach Segment
+        Total Funding by Segment
       </h3>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart
@@ -69,7 +69,7 @@ export default function FundingByCategoryChart({
           <Tooltip
             formatter={(value) => [
               formatFundingValue(value as number),
-              "Gesamtfinanzierung",
+              "Total Funding",
             ]}
             labelFormatter={(_, payload) =>
               payload?.[0]?.payload?.fullName ?? ""

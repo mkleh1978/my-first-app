@@ -17,7 +17,7 @@ export default function CategoryKpiCards({
   if (stats.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border py-12">
-        <p className="text-sm text-muted">Keine Daten verfügbar</p>
+        <p className="text-sm text-muted">No data available</p>
       </div>
     );
   }
@@ -49,12 +49,12 @@ export default function CategoryKpiCards({
             <div className="mt-1 text-lg font-bold text-foreground">
               {stat.company_count.toLocaleString()}
             </div>
-            <div className="text-xs text-muted">Unternehmen</div>
+            <div className="text-xs text-muted">companies</div>
             <div className="mt-2 text-sm font-semibold text-foreground">
               {formatFundingValue(stat.total_funding_sum)}
             </div>
             <div className="text-[11px] text-muted">
-              Ø {formatFundingValue(stat.total_funding_avg)}
+              avg {formatFundingValue(stat.total_funding_avg)}
             </div>
           </button>
         );

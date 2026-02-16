@@ -28,7 +28,7 @@ export default function Header({ totalCount }: HeaderProps) {
             : "text-white/60 hover:bg-white/10 hover:text-white"
         }`}
       >
-        Datenbank
+        Database
       </Link>
       <Link
         href="/reporting"
@@ -105,7 +105,7 @@ export default function Header({ totalCount }: HeaderProps) {
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                 />
               </svg>
-              {totalCount.toLocaleString()} Unternehmen
+              {totalCount.toLocaleString()} Companies
             </div>
           )}
           {user && (
@@ -121,7 +121,7 @@ export default function Header({ totalCount }: HeaderProps) {
               <button
                 onClick={signOut}
                 className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-white/50 transition-colors hover:bg-white/10 hover:text-white"
-                title="Abmelden"
+                title="Sign out"
               >
                 <LogOut className="h-4 w-4" />
               </button>
@@ -132,7 +132,7 @@ export default function Header({ totalCount }: HeaderProps) {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white md:hidden"
-            aria-label="Menü"
+            aria-label="Menu"
           >
             {mobileOpen ? (
               <X className="h-5 w-5" />
@@ -164,10 +164,10 @@ export default function Header({ totalCount }: HeaderProps) {
               <button
                 onClick={signOut}
                 className="ml-3 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-white/50 transition-colors hover:bg-white/10 hover:text-white"
-                title="Abmelden"
+                title="Sign out"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="text-sm">Abmelden</span>
+                <span className="text-sm">Sign out</span>
               </button>
             </div>
           )}
@@ -186,7 +186,7 @@ export default function Header({ totalCount }: HeaderProps) {
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                 />
               </svg>
-              {totalCount.toLocaleString()} Unternehmen
+              {totalCount.toLocaleString()} Companies
             </div>
           )}
         </div>

@@ -175,13 +175,13 @@ export default function CompanyTable({
             d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
           />
         </svg>
-        <p className="text-lg font-medium text-foreground">Fehler beim Laden der Unternehmen.</p>
-        <p className="mb-4 text-sm text-muted">Bitte versuche es erneut.</p>
+        <p className="text-lg font-medium text-foreground">Failed to load companies.</p>
+        <p className="mb-4 text-sm text-muted">Please try again.</p>
         <button
           onClick={onRetry}
           className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
         >
-          Erneut versuchen
+          Try again
         </button>
       </div>
     );
@@ -203,8 +203,8 @@ export default function CompanyTable({
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <p className="text-lg font-medium">Keine Unternehmen gefunden</p>
-        <p className="text-sm">Passe deine Filter oder Suchbegriffe an.</p>
+        <p className="text-lg font-medium">No companies found</p>
+        <p className="text-sm">Try adjusting your filters or search terms.</p>
       </div>
     );
   }
@@ -215,13 +215,13 @@ export default function CompanyTable({
         <thead>
           <tr className="border-b border-border bg-surface">
             <th className="w-10 px-3 py-3" />
-            <SortableHeader label="Unternehmen" column="company_name" sort={sort} onSortChange={onSortChange} />
-            <th className="px-4 py-3 font-semibold text-foreground">Kategorie</th>
-            <th className="px-4 py-3 font-semibold text-foreground">Unterkategorie</th>
-            <SortableHeader label="Land" column="country" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Gegr." column="founded_year" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Finanzierung" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
-            <SortableHeader label="Mitarbeiter" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Company" column="company_name" sort={sort} onSortChange={onSortChange} />
+            <th className="px-4 py-3 font-semibold text-foreground">Category</th>
+            <th className="px-4 py-3 font-semibold text-foreground">Subcategory</th>
+            <SortableHeader label="Country" column="country" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Founded" column="founded_year" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Funding" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
+            <SortableHeader label="Employees" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
             <th className="px-4 py-3 font-semibold text-foreground">Status</th>
           </tr>
         </thead>

@@ -30,7 +30,7 @@ export default function AdminPage() {
       setRowCount(contacts.length);
       setState("parsed");
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "Fehler beim Parsen der Datei.");
+      setErrorMsg(err instanceof Error ? err.message : "Error parsing file.");
       setState("error");
     }
   }, []);
@@ -60,7 +60,7 @@ export default function AdminPage() {
       setResult(importResult);
       setState("done");
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "Fehler beim Import.");
+      setErrorMsg(err instanceof Error ? err.message : "Import failed.");
       setState("error");
     }
   };
@@ -70,7 +70,7 @@ export default function AdminPage() {
       <div className="min-h-screen bg-background">
         <Header />
         <main className="mx-auto max-w-3xl px-6 py-12">
-          <div className="text-center text-muted">Laden...</div>
+          <div className="text-center text-muted">Loading...</div>
         </main>
       </div>
     );
@@ -83,9 +83,9 @@ export default function AdminPage() {
         <main className="mx-auto max-w-3xl px-6 py-12">
           <div className="text-center">
             <AlertCircle className="mx-auto mb-4 h-12 w-12 text-red-400" />
-            <h2 className="text-xl font-bold text-foreground">Zugriff verweigert</h2>
+            <h2 className="text-xl font-bold text-foreground">Access Denied</h2>
             <p className="mt-2 text-sm text-muted">
-              Diese Seite ist nur für Administratoren zugänglich.
+              This page is only accessible to administrators.
             </p>
           </div>
         </main>
@@ -99,7 +99,7 @@ export default function AdminPage() {
       <main className="mx-auto max-w-3xl px-6 py-6">
         <h2 className="text-2xl font-bold text-foreground">Admin: LinkedIn Import</h2>
         <p className="mt-1 text-sm text-muted">
-          Lade eine XLSX-Datei mit LinkedIn-Kontaktdaten hoch. Die Daten werden per Domain-Matching den Unternehmen zugeordnet.
+          Upload an XLSX file with LinkedIn contact data. Data will be matched to companies by domain.
         </p>
 
         {/* Upload Area */}
@@ -110,9 +110,9 @@ export default function AdminPage() {
         >
           <Upload className="mb-3 h-10 w-10 text-muted" />
           <p className="text-sm text-muted">
-            Datei hierher ziehen oder{" "}
+            Drag file here or{" "}
             <label className="cursor-pointer font-medium text-teal hover:underline">
-              Datei auswählen
+              browse files
               <input
                 type="file"
                 accept=".xlsx,.xls"
@@ -124,7 +124,7 @@ export default function AdminPage() {
               />
             </label>
           </p>
-          <p className="mt-1 text-xs text-muted">Nur .xlsx oder .xls Dateien (max. 5 MB)</p>
+          <p className="mt-1 text-xs text-muted">Only .xlsx or .xls files (max. 5 MB)</p>
         </div>
 
         {/* File Info */}
@@ -134,7 +134,7 @@ export default function AdminPage() {
             <div className="flex-1">
               <div className="text-sm font-medium text-foreground">{file.name}</div>
               <div className="text-xs text-muted">
-                {(file.size / 1024).toFixed(0)} KB &middot; {rowCount.toLocaleString()} eindeutige Domains
+                {(file.size / 1024).toFixed(0)} KB &middot; {rowCount.toLocaleString()} unique domains
               </div>
             </div>
             {state === "parsed" && (
@@ -142,7 +142,7 @@ export default function AdminPage() {
                 onClick={handleImport}
                 className="rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-light"
               >
-                Import starten
+                Start Import
               </button>
             )}
           </div>
@@ -152,7 +152,7 @@ export default function AdminPage() {
         {state === "importing" && (
           <div className="mt-4 rounded-lg border border-border bg-surface p-4">
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="text-muted">Importiere...</span>
+              <span className="text-muted">Importing...</span>
               <span className="font-mono text-foreground">
                 {progress.current.toLocaleString()} / {progress.total.toLocaleString()}
               </span>
@@ -173,20 +173,20 @@ export default function AdminPage() {
           <div className="mt-4 space-y-3">
             <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4">
               <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-              <span className="text-sm font-medium text-foreground">Import abgeschlossen!</span>
+              <span className="text-sm font-medium text-foreground">Import complete!</span>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded-lg border border-border bg-surface p-3 text-center">
                 <div className="text-2xl font-bold text-teal">{result.matched}</div>
-                <div className="text-xs text-muted">Gematcht</div>
+                <div className="text-xs text-muted">Matched</div>
               </div>
               <div className="rounded-lg border border-border bg-surface p-3 text-center">
                 <div className="text-2xl font-bold text-foreground">{result.updated}</div>
-                <div className="text-xs text-muted">Aktualisiert</div>
+                <div className="text-xs text-muted">Updated</div>
               </div>
               <div className="rounded-lg border border-border bg-surface p-3 text-center">
                 <div className="text-2xl font-bold text-orange">{result.notFound.length}</div>
-                <div className="text-xs text-muted">Nicht gefunden</div>
+                <div className="text-xs text-muted">Not Found</div>
               </div>
             </div>
 
@@ -196,7 +196,7 @@ export default function AdminPage() {
                   onClick={() => setShowUnmatched(!showUnmatched)}
                   className="flex w-full items-center justify-between p-3 text-sm font-medium text-foreground"
                 >
-                  <span>Nicht-gematchte Domains ({result.notFound.length})</span>
+                  <span>Unmatched Domains ({result.notFound.length})</span>
                   {showUnmatched ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -218,7 +218,7 @@ export default function AdminPage() {
             {result.errors.length > 0 && (
               <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3">
                 <div className="text-sm font-medium text-red-400">
-                  {result.errors.length} Fehler beim Update
+                  {result.errors.length} update errors
                 </div>
                 <div className="mt-1 max-h-40 overflow-y-auto text-xs text-red-300">
                   {result.errors.map((e, i) => (

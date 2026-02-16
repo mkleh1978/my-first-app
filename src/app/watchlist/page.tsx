@@ -132,8 +132,8 @@ export default function WatchlistPage() {
           <div>
             <h2 className="text-2xl font-bold text-foreground">Watchlist</h2>
             <p className="mt-1 text-sm text-muted">
-              {count} {count === 1 ? "Unternehmen" : "Unternehmen"} in deiner
-              Watchlist
+              {count} {count === 1 ? "company" : "companies"} in your
+              watchlist
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -145,7 +145,7 @@ export default function WatchlistPage() {
                   className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-border disabled:opacity-50 disabled:cursor-not-allowed"
                   title={
                     linkedInCount === 0
-                      ? "Keine LinkedIn URLs in der Watchlist vorhanden"
+                      ? "No LinkedIn URLs in the watchlist"
                       : undefined
                   }
                 >
@@ -154,7 +154,7 @@ export default function WatchlistPage() {
                 </button>
                 {companies.length > 0 && (
                   <span className="text-xs text-muted">
-                    {linkedInCount} von {companies.length} mit LinkedIn URL
+                    {linkedInCount} of {companies.length} with LinkedIn URL
                   </span>
                 )}
               </div>
@@ -165,7 +165,7 @@ export default function WatchlistPage() {
               className="flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="h-4 w-4" />
-              Als Excel exportieren
+              Export as Excel
             </button>
           </div>
         </div>
@@ -212,17 +212,16 @@ export default function WatchlistPage() {
           <div className="flex flex-col items-center justify-center py-20 text-muted">
             <Star className="mb-4 h-12 w-12 opacity-30" />
             <p className="text-lg font-medium text-foreground">
-              Deine Watchlist ist noch leer
+              Your watchlist is empty
             </p>
             <p className="mt-1 text-sm">
-              Klicke auf den Stern bei einem Unternehmen, um es hier zu
-              speichern.
+              Click the star on a company to save it here.
             </p>
             <Link
               href="/"
               className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
             >
-              Zur Datenbank
+              Go to Database
             </Link>
           </div>
         )}
@@ -235,26 +234,26 @@ export default function WatchlistPage() {
                 <tr className="border-b border-border bg-surface">
                   <th className="w-10 px-3 py-3" />
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Unternehmen
+                    Company
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Kategorie
+                    Category
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Land
+                    Country
                   </th>
                   {isAdmin && (
                     <>
-                      <th className="px-4 py-3 font-semibold text-foreground">Kontakt</th>
-                      <th className="px-4 py-3 font-semibold text-foreground">Titel</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">Contact</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">Title</th>
                       <th className="px-4 py-3 font-semibold text-foreground">LinkedIn</th>
                     </>
                   )}
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Gegr.
+                    Founded
                   </th>
                   <th className="px-4 py-3 text-right font-semibold text-foreground">
-                    Finanzierung
+                    Funding
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
                     Status

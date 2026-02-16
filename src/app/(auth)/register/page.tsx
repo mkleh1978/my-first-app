@@ -17,12 +17,12 @@ export default function RegisterPage() {
     setError(null);
 
     if (!email.toLowerCase().endsWith("@hoft.berlin")) {
-      setError("Registrierung ist nur mit einer @hoft.berlin-Adresse möglich.");
+      setError("Registration is only available with an @hoft.berlin email address.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwörter stimmen nicht überein.");
+      setError("Passwords do not match.");
       return;
     }
 
@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
     if (error) {
       if (error.message.includes("already registered")) {
-        setError("Diese Email-Adresse ist bereits registriert.");
+        setError("This email address is already registered.");
       } else {
         setError(error.message);
       }
@@ -66,17 +66,17 @@ export default function RegisterPage() {
           </svg>
         </div>
         <h2 className="mb-2 text-lg font-semibold text-white">
-          Bestätigungs-Email gesendet
+          Confirmation Email Sent
         </h2>
         <p className="mb-6 text-sm text-white/60">
-          Bitte prüfe dein Postfach und klicke auf den Bestätigungslink um deinen
-          Account zu aktivieren.
+          Please check your inbox and click the confirmation link to activate
+          your account.
         </p>
         <Link
           href="/login"
           className="text-sm text-teal-light hover:text-white transition-colors"
         >
-          Zurück zum Login
+          Back to Sign In
         </Link>
       </div>
     );
@@ -88,7 +88,7 @@ export default function RegisterPage() {
       className="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur"
     >
       <h2 className="mb-6 text-lg font-semibold text-white">
-        Konto erstellen
+        Create Account
       </h2>
 
       {error && (
@@ -121,7 +121,7 @@ export default function RegisterPage() {
             htmlFor="password"
             className="mb-1 block text-sm font-medium text-white/70"
           >
-            Passwort
+            Password
           </label>
           <input
             id="password"
@@ -131,7 +131,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
-            placeholder="Mindestens 8 Zeichen"
+            placeholder="Minimum 8 characters"
           />
         </div>
 
@@ -140,7 +140,7 @@ export default function RegisterPage() {
             htmlFor="confirm-password"
             className="mb-1 block text-sm font-medium text-white/70"
           >
-            Passwort bestätigen
+            Confirm Password
           </label>
           <input
             id="confirm-password"
@@ -150,7 +150,7 @@ export default function RegisterPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
-            placeholder="Passwort wiederholen"
+            placeholder="Repeat password"
           />
         </div>
       </div>
@@ -160,16 +160,16 @@ export default function RegisterPage() {
         disabled={loading}
         className="mt-6 w-full rounded-lg bg-teal py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50"
       >
-        {loading ? "Registrieren..." : "Registrieren"}
+        {loading ? "Registering..." : "Register"}
       </button>
 
       <p className="mt-4 text-center text-sm text-white/50">
-        Bereits ein Konto?{" "}
+        Already have an account?{" "}
         <Link
           href="/login"
           className="text-teal-light hover:text-white transition-colors"
         >
-          Anmelden
+          Sign In
         </Link>
       </p>
     </form>

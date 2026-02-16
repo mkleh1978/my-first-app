@@ -12,7 +12,7 @@ export default function TopKeywordsCloud({
   if (keywords.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-surface py-12">
-        <p className="text-sm text-muted">Keine Feature-Daten verfügbar</p>
+        <p className="text-sm text-muted">No feature data available</p>
       </div>
     );
   }
@@ -22,7 +22,7 @@ export default function TopKeywordsCloud({
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Top-Produktmerkmale
+        Top Product Features
       </h3>
       <div className="flex flex-wrap gap-2">
         {keywords.map((kw) => {

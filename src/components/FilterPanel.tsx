@@ -50,7 +50,7 @@ export default function FilterPanel({
           </svg>
           <input
             type="text"
-            placeholder="Unternehmen, Domains, Beschreibungen suchen..."
+            placeholder="Search companies, domains, descriptions..."
             value={filters.search}
             onChange={(e) => update({ search: e.target.value })}
             className="w-full rounded-lg border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
@@ -68,7 +68,7 @@ export default function FilterPanel({
           }
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
         >
-          <option value="">Alle Kategorien</option>
+          <option value="">All Categories</option>
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -83,7 +83,7 @@ export default function FilterPanel({
             onChange={(e) => update({ subcategory: e.target.value })}
             className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
           >
-            <option value="">Alle Unterkategorien</option>
+            <option value="">All Subcategories</option>
             {subcategories.map((sub) => (
               <option key={sub} value={sub}>
                 {sub}
@@ -98,7 +98,7 @@ export default function FilterPanel({
           onChange={(e) => update({ country: e.target.value })}
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
         >
-          <option value="">Alle L\u00e4nder</option>
+          <option value="">All Countries</option>
           {countries.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -112,7 +112,7 @@ export default function FilterPanel({
           onChange={(e) => update({ status: e.target.value })}
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
         >
-          <option value="">Alle Status</option>
+          <option value="">All Statuses</option>
           <option value="Operational">Operational</option>
           <option value="Closed">Closed</option>
           <option value="Acquired">Acquired</option>
@@ -124,7 +124,7 @@ export default function FilterPanel({
           onChange={(e) => update({ targetModel: e.target.value })}
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/20"
         >
-          <option value="">Alle Modelle</option>
+          <option value="">All Models</option>
           <option value="B2B">B2B</option>
           <option value="B2C">B2C</option>
           <option value="B2B, B2C">B2B & B2C</option>
@@ -138,7 +138,7 @@ export default function FilterPanel({
             onChange={(e) => update({ memberOnly: e.target.checked })}
             className="h-4 w-4 rounded border-border text-primary accent-primary"
           />
-          <span>HoFT Mitglieder</span>
+          <span>HoFT Members</span>
         </label>
 
         {/* Clear filters */}
@@ -157,14 +157,14 @@ export default function FilterPanel({
             }
             className="rounded-lg px-3 py-2 text-sm text-primary-light hover:bg-primary-light/10"
           >
-            Filter zur\u00fccksetzen
+            Reset filters
           </button>
         )}
 
         {/* Count */}
         <span className="ml-auto text-sm text-muted">
           {filteredCount.toLocaleString()} von {totalCount.toLocaleString()}{" "}
-          Unternehmen
+          Companies
         </span>
       </div>
     </div>

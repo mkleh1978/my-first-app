@@ -111,23 +111,23 @@ export default function ReportingPage() {
   // Page title and subtitle
   const title =
     level === 0
-      ? "Kategorie-Analyse"
+      ? "Category Analysis"
       : level === 1
-        ? `${selectedCategory} — Unterkategorien`
+        ? `${selectedCategory} — Subcategories`
         : `${selectedCategory} → ${selectedSubcategory}`;
 
   const subtitle =
     level === 0
-      ? "\u00dcbersicht \u00fcber alle 5 Hauptkategorien"
+      ? "Overview of all 5 main categories"
       : level === 1
-        ? "Detailanalyse der Unterkategorien"
-        : "Fokus auf Unterkategorie";
+        ? "Detailed subcategory analysis"
+        : "Subcategory focus";
 
   // Back button label
   const backLabel =
     level === 2
-      ? `Zur\u00fcck zu ${selectedCategory}`
-      : "Zur\u00fcck zur \u00dcbersicht";
+      ? `Back to ${selectedCategory}`
+      : "Back to Overview";
 
   // Active segment for KPI card highlighting
   const activeSegment =
@@ -216,14 +216,14 @@ export default function ReportingPage() {
               />
             </svg>
             <p className="text-lg font-medium text-foreground">
-              Fehler beim Laden der Reporting-Daten.
+              Failed to load reporting data.
             </p>
-            <p className="mb-4 text-sm text-muted">Bitte versuche es erneut.</p>
+            <p className="mb-4 text-sm text-muted">Please try again.</p>
             <button
               onClick={handleRetry}
               className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
             >
-              Erneut versuchen
+              Try again
             </button>
           </div>
         )}

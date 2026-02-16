@@ -41,17 +41,17 @@ export default function ResetPasswordPage() {
           </svg>
         </div>
         <h2 className="mb-2 text-lg font-semibold text-white">
-          Email gesendet
+          Email Sent
         </h2>
         <p className="mb-6 text-sm text-white/60">
-          Falls ein Account mit dieser Email existiert, wurde ein
-          Passwort-Reset-Link gesendet.
+          If an account with this email exists, a password reset link has been
+          sent.
         </p>
         <Link
           href="/login"
           className="text-sm text-teal-light hover:text-white transition-colors"
         >
-          Zurück zum Login
+          Back to Sign In
         </Link>
       </div>
     );
@@ -63,11 +63,10 @@ export default function ResetPasswordPage() {
       className="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur"
     >
       <h2 className="mb-2 text-lg font-semibold text-white">
-        Passwort zurücksetzen
+        Reset Password
       </h2>
       <p className="mb-6 text-sm text-white/60">
-        Gib deine Email-Adresse ein und wir senden dir einen Link zum
-        Zurücksetzen.
+        Enter your email address and we&apos;ll send you a reset link.
       </p>
 
       <div>
@@ -84,7 +83,7 @@ export default function ResetPasswordPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
-          placeholder="name@beispiel.de"
+          placeholder="name@example.com"
         />
       </div>
 
@@ -93,7 +92,7 @@ export default function ResetPasswordPage() {
         disabled={loading}
         className="mt-6 w-full rounded-lg bg-teal py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50"
       >
-        {loading ? "Senden..." : "Reset-Link senden"}
+        {loading ? "Sending..." : "Send Reset Link"}
       </button>
 
       <p className="mt-4 text-center text-sm text-white/50">
@@ -101,7 +100,7 @@ export default function ResetPasswordPage() {
           href="/login"
           className="text-teal-light hover:text-white transition-colors"
         >
-          Zurück zum Login
+          Back to Sign In
         </Link>
       </p>
     </form>

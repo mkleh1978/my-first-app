@@ -25,7 +25,7 @@ export default function FundingTimelineChart({
   if (timeline.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-background py-12">
-        <p className="text-sm text-muted">Keine Zeitreihendaten verfügbar</p>
+        <p className="text-sm text-muted">No timeline data available</p>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export default function FundingTimelineChart({
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Finanzierungsverlauf (2010–2025)
+        Funding Timeline (2010–2025)
       </h3>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart

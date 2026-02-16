@@ -255,11 +255,11 @@ export default function Home() {
 
       setBulkResult(
         added > 0
-          ? `${added} Companies zur Watchlist hinzugefügt`
-          : "Alle Companies sind bereits in der Watchlist"
+          ? `${added} companies added to watchlist`
+          : "All companies are already in the watchlist"
       );
     } catch (err) {
-      setBulkResult(`Fehler: ${err instanceof Error ? err.message : "Unbekannter Fehler"}`);
+      setBulkResult(`Error: ${err instanceof Error ? err.message : "Unknown error"}`);
     } finally {
       setBulkAdding(false);
       setTimeout(() => setBulkResult(null), 4000);
@@ -302,12 +302,12 @@ export default function Home() {
               >
                 <Star className="h-4 w-4" />
                 {bulkAdding
-                  ? "Wird hinzugefügt..."
-                  : `Alle ${Math.min(filteredCount, BULK_LIMIT)} zur Watchlist`}
+                  ? "Adding..."
+                  : `Add all ${Math.min(filteredCount, BULK_LIMIT)} to Watchlist`}
               </button>
               {filteredCount > BULK_LIMIT && (
                 <span className="text-xs text-muted">
-                  Max. {BULK_LIMIT} Companies auf einmal (aktuell {filteredCount.toLocaleString()})
+                  Max. {BULK_LIMIT} companies at once (currently {filteredCount.toLocaleString()})
                 </span>
               )}
               {bulkResult && (
@@ -335,10 +335,10 @@ export default function Home() {
                 disabled={page === 0}
                 className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Zur\u00fcck
+                Previous
               </button>
               <span className="text-sm text-muted">
-                Seite {page + 1} von {totalPages}
+                Page {page + 1} of {totalPages}
               </span>
               <button
                 onClick={() =>
@@ -347,7 +347,7 @@ export default function Home() {
                 disabled={page >= totalPages - 1}
                 className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Weiter
+                Next
               </button>
             </div>
           )}
