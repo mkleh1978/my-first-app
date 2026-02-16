@@ -122,29 +122,42 @@ export default function CompanyTable({
   const { isAdmin } = useAuth();
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="flex items-center gap-3 text-muted">
-          <svg
-            className="h-5 w-5 animate-spin"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-          Loading companies...
-        </div>
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-left text-sm">
+          <thead>
+            <tr className="border-b border-border bg-surface">
+              <th className="w-10 px-3 py-3" />
+              <th className="px-4 py-3"><div className="h-4 w-24 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-20 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-24 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-14 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-12 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-20 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-16 animate-pulse rounded bg-border" /></th>
+              <th className="px-4 py-3"><div className="h-4 w-14 animate-pulse rounded bg-border" /></th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <tr key={i} className="border-b border-border last:border-b-0">
+                <td className="px-3 py-3"><div className="h-5 w-5 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3">
+                  <div className="space-y-1.5">
+                    <div className="h-4 w-32 animate-pulse rounded bg-border" />
+                    <div className="h-3 w-24 animate-pulse rounded bg-border" />
+                  </div>
+                </td>
+                <td className="px-4 py-3"><div className="h-5 w-28 animate-pulse rounded-full bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-24 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-16 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-10 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-16 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-14 animate-pulse rounded bg-border" /></td>
+                <td className="px-4 py-3"><div className="h-5 w-20 animate-pulse rounded-full bg-border" /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -165,13 +178,13 @@ export default function CompanyTable({
             d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
           />
         </svg>
-        <p className="text-lg font-medium text-foreground">Failed to load companies.</p>
-        <p className="mb-4 text-sm text-muted">Please try again.</p>
+        <p className="text-lg font-medium text-foreground">Fehler beim Laden der Unternehmen.</p>
+        <p className="mb-4 text-sm text-muted">Bitte versuche es erneut.</p>
         <button
           onClick={onRetry}
           className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
         >
-          Retry
+          Erneut versuchen
         </button>
       </div>
     );
@@ -193,8 +206,8 @@ export default function CompanyTable({
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <p className="text-lg font-medium">No companies found</p>
-        <p className="text-sm">Try adjusting your filters or search term.</p>
+        <p className="text-lg font-medium">Keine Unternehmen gefunden</p>
+        <p className="text-sm">Passe deine Filter oder Suchbegriffe an.</p>
       </div>
     );
   }
@@ -205,20 +218,20 @@ export default function CompanyTable({
         <thead>
           <tr className="border-b border-border bg-surface">
             <th className="w-10 px-3 py-3" />
-            <SortableHeader label="Company" column="company_name" sort={sort} onSortChange={onSortChange} />
-            <th className="px-4 py-3 font-semibold text-foreground">Category</th>
-            <th className="px-4 py-3 font-semibold text-foreground">Subcategory</th>
-            <SortableHeader label="Country" column="country" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Unternehmen" column="company_name" sort={sort} onSortChange={onSortChange} />
+            <th className="px-4 py-3 font-semibold text-foreground">Kategorie</th>
+            <th className="px-4 py-3 font-semibold text-foreground">Unterkategorie</th>
+            <SortableHeader label="Land" column="country" sort={sort} onSortChange={onSortChange} />
             {isAdmin && (
               <>
-                <th className="px-4 py-3 font-semibold text-foreground">Contact</th>
-                <th className="px-4 py-3 font-semibold text-foreground">Title</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Kontakt</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Titel</th>
                 <th className="px-4 py-3 font-semibold text-foreground">LinkedIn</th>
               </>
             )}
-            <SortableHeader label="Founded" column="founded_year" sort={sort} onSortChange={onSortChange} />
-            <SortableHeader label="Total Funding" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
-            <SortableHeader label="Employees" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Gegr." column="founded_year" sort={sort} onSortChange={onSortChange} />
+            <SortableHeader label="Finanzierung" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
+            <SortableHeader label="Mitarbeiter" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
             <th className="px-4 py-3 font-semibold text-foreground">Status</th>
           </tr>
         </thead>

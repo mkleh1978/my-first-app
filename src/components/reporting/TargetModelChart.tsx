@@ -18,7 +18,7 @@ export default function TargetModelChart({ items }: TargetModelChartProps) {
   if (modelItems.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-surface py-12">
-        <p className="text-sm text-muted">No target model data</p>
+        <p className="text-sm text-muted">Keine Zielmodelldaten verfügbar</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export default function TargetModelChart({ items }: TargetModelChartProps) {
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Target Model
+        Zielmodell
       </h3>
       <div className="flex items-center gap-4">
         <ResponsiveContainer width={140} height={140}>

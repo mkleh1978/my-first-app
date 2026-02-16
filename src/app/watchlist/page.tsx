@@ -10,7 +10,24 @@ import StarButton from "@/components/StarButton";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
 import { useAuth } from "@/lib/auth-context";
 import { Download, ExternalLink, Star } from "lucide-react";
+import Link from "next/link";
 import * as XLSX from "xlsx";
+
+function StatusBadge({ status }: { status: string | null }) {
+  if (!status) return <span className="text-muted">-</span>;
+  const colors: Record<string, string> = {
+    Operational: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
+    Closed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+    Acquired: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
+  };
+  return (
+    <span
+      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${colors[status] ?? "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"}`}
+    >
+      {status}
+    </span>
+  );
+}
 
 function formatFunding(value: number | null): string {
   if (value == null || value === 0) return "-";
@@ -115,7 +132,7 @@ export default function WatchlistPage() {
           <div>
             <h2 className="text-2xl font-bold text-foreground">Watchlist</h2>
             <p className="mt-1 text-sm text-muted">
-              {count} {count === 1 ? "Company" : "Companies"} in deiner
+              {count} {count === 1 ? "Unternehmen" : "Unternehmen"} in deiner
               Watchlist
             </p>
           </div>
@@ -148,36 +165,45 @@ export default function WatchlistPage() {
               className="flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="h-4 w-4" />
-              Export as Excel
+              Als Excel exportieren
             </button>
           </div>
         </div>
 
-        {/* Loading */}
+        {/* Loading skeleton */}
         {(loading || favLoading) && (
-          <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-muted">
-              <svg
-                className="h-5 w-5 animate-spin"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              Loading watchlist...
-            </div>
+          <div className="overflow-x-auto rounded-lg border border-border">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-border bg-surface">
+                  <th className="w-10 px-3 py-3" />
+                  <th className="px-4 py-3"><div className="h-4 w-24 animate-pulse rounded bg-border" /></th>
+                  <th className="px-4 py-3"><div className="h-4 w-20 animate-pulse rounded bg-border" /></th>
+                  <th className="px-4 py-3"><div className="h-4 w-14 animate-pulse rounded bg-border" /></th>
+                  <th className="px-4 py-3"><div className="h-4 w-12 animate-pulse rounded bg-border" /></th>
+                  <th className="px-4 py-3"><div className="h-4 w-20 animate-pulse rounded bg-border" /></th>
+                  <th className="px-4 py-3"><div className="h-4 w-14 animate-pulse rounded bg-border" /></th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i} className="border-b border-border last:border-b-0">
+                    <td className="px-3 py-3"><div className="h-5 w-5 animate-pulse rounded bg-border" /></td>
+                    <td className="px-4 py-3">
+                      <div className="space-y-1.5">
+                        <div className="h-4 w-32 animate-pulse rounded bg-border" />
+                        <div className="h-3 w-24 animate-pulse rounded bg-border" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3"><div className="h-4 w-24 animate-pulse rounded bg-border" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-16 animate-pulse rounded bg-border" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-10 animate-pulse rounded bg-border" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-16 animate-pulse rounded bg-border" /></td>
+                    <td className="px-4 py-3"><div className="h-5 w-20 animate-pulse rounded-full bg-border" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
@@ -192,12 +218,12 @@ export default function WatchlistPage() {
               Klicke auf den Stern bei einem Unternehmen, um es hier zu
               speichern.
             </p>
-            <a
+            <Link
               href="/"
               className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
             >
               Zur Datenbank
-            </a>
+            </Link>
           </div>
         )}
 
@@ -209,26 +235,26 @@ export default function WatchlistPage() {
                 <tr className="border-b border-border bg-surface">
                   <th className="w-10 px-3 py-3" />
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Company
+                    Unternehmen
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Category
+                    Kategorie
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Country
+                    Land
                   </th>
                   {isAdmin && (
                     <>
-                      <th className="px-4 py-3 font-semibold text-foreground">Contact</th>
-                      <th className="px-4 py-3 font-semibold text-foreground">Title</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">Kontakt</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">Titel</th>
                       <th className="px-4 py-3 font-semibold text-foreground">LinkedIn</th>
                     </>
                   )}
                   <th className="px-4 py-3 font-semibold text-foreground">
-                    Founded
+                    Gegr.
                   </th>
                   <th className="px-4 py-3 text-right font-semibold text-foreground">
-                    Total Funding
+                    Finanzierung
                   </th>
                   <th className="px-4 py-3 font-semibold text-foreground">
                     Status
@@ -307,8 +333,8 @@ export default function WatchlistPage() {
                     <td className="px-4 py-3 text-right font-mono text-sm">
                       {formatFunding(company.total_funding)}
                     </td>
-                    <td className="px-4 py-3 text-muted">
-                      {company.company_status ?? "-"}
+                    <td className="px-4 py-3">
+                      <StatusBadge status={company.company_status} />
                     </td>
                   </tr>
                 ))}

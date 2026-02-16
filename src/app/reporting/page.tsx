@@ -111,23 +111,23 @@ export default function ReportingPage() {
   // Page title and subtitle
   const title =
     level === 0
-      ? "Aggregated Category Analysis"
+      ? "Kategorie-Analyse"
       : level === 1
-        ? `${selectedCategory} — Subcategory Analysis`
+        ? `${selectedCategory} — Unterkategorien`
         : `${selectedCategory} → ${selectedSubcategory}`;
 
   const subtitle =
     level === 0
-      ? "Overview across all 5 main categories"
+      ? "\u00dcbersicht \u00fcber alle 5 Hauptkategorien"
       : level === 1
-        ? "Drill-down into subcategories"
-        : "Subcategory focus";
+        ? "Detailanalyse der Unterkategorien"
+        : "Fokus auf Unterkategorie";
 
   // Back button label
   const backLabel =
     level === 2
-      ? `Back to ${selectedCategory}`
-      : "Back to Overview";
+      ? `Zur\u00fcck zu ${selectedCategory}`
+      : "Zur\u00fcck zur \u00dcbersicht";
 
   // Active segment for KPI card highlighting
   const activeSegment =
@@ -171,30 +171,30 @@ export default function ReportingPage() {
           )}
         </div>
 
-        {/* Loading state */}
+        {/* Loading skeleton */}
         {loading && (
-          <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-muted">
-              <svg
-                className="h-5 w-5 animate-spin"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              Loading reporting data...
+          <div className="space-y-6">
+            {/* KPI card skeletons */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="rounded-lg border border-border p-4">
+                  <div className="mb-2 h-1 w-8 animate-pulse rounded-full bg-border" />
+                  <div className="h-3 w-20 animate-pulse rounded bg-border" />
+                  <div className="mt-2 h-6 w-12 animate-pulse rounded bg-border" />
+                  <div className="mt-1 h-3 w-16 animate-pulse rounded bg-border" />
+                  <div className="mt-2 h-4 w-14 animate-pulse rounded bg-border" />
+                </div>
+              ))}
+            </div>
+            {/* Chart skeletons */}
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="h-[340px] animate-pulse rounded-lg border border-border bg-surface" />
+              <div className="h-[340px] animate-pulse rounded-lg border border-border bg-surface" />
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="h-[200px] animate-pulse rounded-lg border border-border bg-surface" />
+              <div className="h-[200px] animate-pulse rounded-lg border border-border bg-surface" />
+              <div className="h-[200px] animate-pulse rounded-lg border border-border bg-surface" />
             </div>
           </div>
         )}
@@ -216,14 +216,14 @@ export default function ReportingPage() {
               />
             </svg>
             <p className="text-lg font-medium text-foreground">
-              Failed to load reporting data.
+              Fehler beim Laden der Reporting-Daten.
             </p>
-            <p className="mb-4 text-sm text-muted">Please try again.</p>
+            <p className="mb-4 text-sm text-muted">Bitte versuche es erneut.</p>
             <button
               onClick={handleRetry}
               className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
             >
-              Retry
+              Erneut versuchen
             </button>
           </div>
         )}

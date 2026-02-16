@@ -303,7 +303,7 @@ export default function Home() {
                 <Star className="h-4 w-4" />
                 {bulkAdding
                   ? "Wird hinzugefügt..."
-                  : `Alle ${filteredCount > BULK_LIMIT ? filteredCount : filteredCount} zur Watchlist`}
+                  : `Alle ${Math.min(filteredCount, BULK_LIMIT)} zur Watchlist`}
               </button>
               {filteredCount > BULK_LIMIT && (
                 <span className="text-xs text-muted">
@@ -335,10 +335,10 @@ export default function Home() {
                 disabled={page === 0}
                 className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Previous
+                Zur\u00fcck
               </button>
               <span className="text-sm text-muted">
-                Page {page + 1} of {totalPages}
+                Seite {page + 1} von {totalPages}
               </span>
               <button
                 onClick={() =>
@@ -347,7 +347,7 @@ export default function Home() {
                 disabled={page >= totalPages - 1}
                 className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Next
+                Weiter
               </button>
             </div>
           )}

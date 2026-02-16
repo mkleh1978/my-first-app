@@ -14,7 +14,7 @@ export default function TopCountriesList({ items }: TopCountriesListProps) {
   if (countryItems.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-surface py-12">
-        <p className="text-sm text-muted">No country data</p>
+        <p className="text-sm text-muted">Keine Länderdaten verfügbar</p>
       </div>
     );
   }
@@ -24,7 +24,7 @@ export default function TopCountriesList({ items }: TopCountriesListProps) {
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Top Countries
+        Top-Länder
       </h3>
       <div className="space-y-2.5">
         {countryItems.map((item, index) => (

@@ -113,30 +113,30 @@ export default function CompanyDetailModal({
   ) : null;
 
   const companyInfoItems = [
-    { icon: <MapPin className="h-4 w-4" />, label: "Location", value: location },
+    { icon: <MapPin className="h-4 w-4" />, label: "Standort", value: location },
     { icon: <Globe className="h-4 w-4" />, label: "Region", value: company.region },
     {
       icon: <Target className="h-4 w-4" />,
-      label: "Target Model",
+      label: "Zielmodell",
       value: company.target_model,
     },
     {
       icon: <Package className="h-4 w-4" />,
-      label: "Product Type",
+      label: "Produkttyp",
       value: company.product_type,
     },
     {
       icon: <User className="h-4 w-4" />,
-      label: "Founders / CEOs",
+      label: "Gründer / CEOs",
       value: company.founders_ceos,
     },
   ].filter((item) => item.value);
 
   const productDetails = [
-    { label: "Value Proposition", text: company.core_value_proposition },
-    { label: "Problem Solved", text: company.problem_solved },
-    { label: "Key Features", text: company.key_features },
-    { label: "Competitive Advantage", text: company.competitive_advantage_usp },
+    { label: "Wertversprechen", text: company.core_value_proposition },
+    { label: "Gelöstes Problem", text: company.problem_solved },
+    { label: "Hauptfunktionen", text: company.key_features },
+    { label: "Wettbewerbsvorteil", text: company.competitive_advantage_usp },
   ].filter((d) => d.text);
 
   const latestRoundValue = company.latest_round
@@ -162,7 +162,7 @@ export default function CompanyDetailModal({
               </h2>
               {company.member && (
                 <span className="rounded bg-teal/10 px-2 py-1 text-xs font-bold uppercase tracking-wider text-teal">
-                  HoFT Member
+                  HoFT Mitglied
                 </span>
               )}
             </div>
@@ -196,19 +196,19 @@ export default function CompanyDetailModal({
           {/* 1. Quick Stats */}
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div className="rounded-lg bg-background p-3">
-              <div className="text-xs text-muted">Total Funding</div>
+              <div className="text-xs text-muted">Gesamtfinanzierung</div>
               <div className="mt-1 text-lg font-semibold">
                 {formatFunding(company.total_funding)}
               </div>
             </div>
             <div className="rounded-lg bg-background p-3">
-              <div className="text-xs text-muted">Founded</div>
+              <div className="text-xs text-muted">Gegründet</div>
               <div className="mt-1 text-lg font-semibold">
                 {formatYear(company.founded_year)}
               </div>
             </div>
             <div className="rounded-lg bg-background p-3">
-              <div className="text-xs text-muted">Employees</div>
+              <div className="text-xs text-muted">Mitarbeiter</div>
               <div className="mt-1 text-lg font-semibold">
                 {company.number_of_employees
                   ? Math.round(company.number_of_employees).toLocaleString()
@@ -225,7 +225,7 @@ export default function CompanyDetailModal({
 
           {/* 2. Categories */}
           {categories.length > 0 && (
-            <Section title="Categories">
+            <Section title="Kategorien">
               <div className="flex flex-wrap gap-2">
                 {categories.map((c, i) => (
                   <div
@@ -244,7 +244,7 @@ export default function CompanyDetailModal({
 
           {/* 3. Company Info — 2-column grid with icons */}
           {companyInfoItems.length > 0 && (
-            <Section title="Company Info">
+            <Section title="Unternehmensdaten">
               <div className="grid gap-x-6 gap-y-1 rounded-lg border border-border p-4 sm:grid-cols-2">
                 {companyInfoItems.map((item) => (
                   <InfoItem
@@ -261,12 +261,12 @@ export default function CompanyDetailModal({
           {/* 3b. Key Contact — Admin only */}
           {isAdmin &&
             (company.contact_name || company.job_title || company.linkedin_profile_url) && (
-              <Section title="Key Contact">
+              <Section title="Ansprechpartner">
                 <div className="grid gap-x-6 gap-y-1 rounded-lg border border-border p-4 sm:grid-cols-2">
                   {company.contact_name && (
                     <InfoItem
                       icon={<User className="h-4 w-4" />}
-                      label="Contact"
+                      label="Kontakt"
                       value={
                         <span>
                           {company.contact_name}
@@ -282,7 +282,7 @@ export default function CompanyDetailModal({
                   {!company.contact_name && company.job_title && (
                     <InfoItem
                       icon={<User className="h-4 w-4" />}
-                      label="Title"
+                      label="Titel"
                       value={company.job_title}
                     />
                   )}
@@ -301,7 +301,7 @@ export default function CompanyDetailModal({
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-primary-light hover:underline"
                         >
-                          {company.contact_name || "LinkedIn Profile"}
+                          {company.contact_name || "LinkedIn-Profil"}
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       }
@@ -313,7 +313,7 @@ export default function CompanyDetailModal({
 
           {/* 4. Product Details — Bullet lists */}
           {productDetails.length > 0 && (
-            <Section title="Product Details">
+            <Section title="Produktdetails">
               <div className="space-y-4 rounded-lg border border-border p-4">
                 {productDetails.map((d) => (
                   <div key={d.label}>
@@ -328,11 +328,11 @@ export default function CompanyDetailModal({
           )}
 
           {/* 5. Funding History */}
-          <Section title="Funding History">
+          <Section title="Finanzierungshistorie">
             <FundingChart company={company} />
             {latestRoundValue && (
               <div className="mt-2 flex gap-3 text-sm">
-                <span className="text-muted">Latest Round</span>
+                <span className="text-muted">Letzte Runde</span>
                 <span className="text-foreground">{latestRoundValue}</span>
               </div>
             )}
@@ -340,7 +340,7 @@ export default function CompanyDetailModal({
 
           {/* 6. Investors */}
           {company.investors && (
-            <Section title="Investors">
+            <Section title="Investoren">
               <div className="rounded-lg border border-border p-4">
                 <BulletOrParagraph text={company.investors} />
               </div>
@@ -349,7 +349,7 @@ export default function CompanyDetailModal({
 
           {/* 7. Competitors */}
           {company.top_competitors && (
-            <Section title="Top Competitors">
+            <Section title="Top-Wettbewerber">
               <div className="rounded-lg border border-border p-4">
                 <BulletOrParagraph text={company.top_competitors} />
               </div>
@@ -358,7 +358,7 @@ export default function CompanyDetailModal({
 
           {/* 8. Integration Capabilities */}
           {company.integration_capabilities && (
-            <Section title="Integration Capabilities">
+            <Section title="Integrationsmöglichkeiten">
               <div className="rounded-lg border border-border p-4">
                 <BulletOrParagraph text={company.integration_capabilities} />
               </div>

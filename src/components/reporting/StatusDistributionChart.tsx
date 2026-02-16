@@ -18,7 +18,7 @@ export default function StatusDistributionChart({
   if (statusItems.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-border bg-surface py-12">
-        <p className="text-sm text-muted">No status data</p>
+        <p className="text-sm text-muted">Keine Statusdaten verfügbar</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export default function StatusDistributionChart({
   return (
     <div className="rounded-lg border border-border bg-surface p-4">
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-        Company Status
+        Unternehmensstatus
       </h3>
       <div className="flex items-center gap-4">
         <ResponsiveContainer width={140} height={140}>
