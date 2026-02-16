@@ -32,6 +32,9 @@ export interface FinTechCompany {
   top_competitors: string | null;
   analysis_status: string | null;
   member: boolean;
+  contact_name: string | null;
+  job_title: string | null;
+  linkedin_profile_url: string | null;
   funding_2010: string | null;
   funding_2011: string | null;
   funding_2012: string | null;

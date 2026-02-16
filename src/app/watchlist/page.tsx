@@ -8,7 +8,8 @@ import { countryToIso } from "@/lib/country-flags";
 import Header from "@/components/Header";
 import StarButton from "@/components/StarButton";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
-import { Download, Star } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { Download, ExternalLink, Star } from "lucide-react";
 import * as XLSX from "xlsx";
 
 function formatFunding(value: number | null): string {
@@ -25,6 +26,7 @@ function formatYear(value: number | null): string {
 }
 
 export default function WatchlistPage() {
+  const { isAdmin } = useAuth();
   const { favoriteIds, count, loading: favLoading } = useFavorites();
   const [companies, setCompanies] = useState<FinTechCompany[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,6 +83,28 @@ export default function WatchlistPage() {
     XLSX.writeFile(wb, `HoFT_Watchlist_${today}.xlsx`);
   }
 
+  const linkedInCount = companies.filter((c) => c.linkedin_profile_url).length;
+
+  function handleDripifyExport() {
+    const urls = companies
+      .filter((c) => c.linkedin_profile_url)
+      .map((c) => {
+        const url = c.linkedin_profile_url!.trim();
+        return url.startsWith("http") ? url : `https://${url}`;
+      });
+
+    if (urls.length === 0) return;
+
+    const csv = "profileUrl\n" + urls.join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    const today = new Date().toISOString().split("T")[0];
+    link.download = `HoFT_Dripify_Export_${today}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -95,14 +119,38 @@ export default function WatchlistPage() {
               Watchlist
             </p>
           </div>
-          <button
-            onClick={handleExport}
-            disabled={companies.length === 0}
-            className="flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Download className="h-4 w-4" />
-            Export as Excel
-          </button>
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <div className="flex flex-col items-end gap-1">
+                <button
+                  onClick={handleDripifyExport}
+                  disabled={linkedInCount === 0}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-border disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={
+                    linkedInCount === 0
+                      ? "Keine LinkedIn URLs in der Watchlist vorhanden"
+                      : undefined
+                  }
+                >
+                  <Download className="h-4 w-4" />
+                  Dripify Export
+                </button>
+                {companies.length > 0 && (
+                  <span className="text-xs text-muted">
+                    {linkedInCount} von {companies.length} mit LinkedIn URL
+                  </span>
+                )}
+              </div>
+            )}
+            <button
+              onClick={handleExport}
+              disabled={companies.length === 0}
+              className="flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-light disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Download className="h-4 w-4" />
+              Export as Excel
+            </button>
+          </div>
         </div>
 
         {/* Loading */}
@@ -169,6 +217,13 @@ export default function WatchlistPage() {
                   <th className="px-4 py-3 font-semibold text-foreground">
                     Country
                   </th>
+                  {isAdmin && (
+                    <>
+                      <th className="px-4 py-3 font-semibold text-foreground">Contact</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">Title</th>
+                      <th className="px-4 py-3 font-semibold text-foreground">LinkedIn</th>
+                    </>
+                  )}
                   <th className="px-4 py-3 font-semibold text-foreground">
                     Founded
                   </th>
@@ -217,6 +272,35 @@ export default function WatchlistPage() {
                         "-"
                       )}
                     </td>
+                    {isAdmin && (
+                      <>
+                        <td className="px-4 py-3 text-muted">
+                          {company.contact_name ?? "-"}
+                        </td>
+                        <td className="px-4 py-3 text-muted">
+                          {company.job_title ?? "-"}
+                        </td>
+                        <td className="px-4 py-3">
+                          {company.linkedin_profile_url ? (
+                            <a
+                              href={
+                                company.linkedin_profile_url.startsWith("http")
+                                  ? company.linkedin_profile_url
+                                  : `https://${company.linkedin_profile_url}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 text-primary-light hover:underline"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                          ) : (
+                            <span className="text-muted">-</span>
+                          )}
+                        </td>
+                      </>
+                    )}
                     <td className="px-4 py-3 text-muted">
                       {formatYear(company.founded_year)}
                     </td>

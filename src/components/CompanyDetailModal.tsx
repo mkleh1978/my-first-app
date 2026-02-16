@@ -10,9 +10,11 @@ import {
   Package,
   User,
   ExternalLink,
+  Linkedin,
   X,
 } from "lucide-react";
 import { countryToIso } from "@/lib/country-flags";
+import { useAuth } from "@/lib/auth-context";
 import StarButton from "@/components/StarButton";
 
 interface CompanyDetailModalProps {
@@ -92,6 +94,8 @@ export default function CompanyDetailModal({
   company,
   onClose,
 }: CompanyDetailModalProps) {
+  const { isAdmin } = useAuth();
+
   const categories = [
     { cat: company.category_1, sub: company.subcategory_1 },
     { cat: company.category_2, sub: company.subcategory_2 },
@@ -253,6 +257,59 @@ export default function CompanyDetailModal({
               </div>
             </Section>
           )}
+
+          {/* 3b. Key Contact — Admin only */}
+          {isAdmin &&
+            (company.contact_name || company.job_title || company.linkedin_profile_url) && (
+              <Section title="Key Contact">
+                <div className="grid gap-x-6 gap-y-1 rounded-lg border border-border p-4 sm:grid-cols-2">
+                  {company.contact_name && (
+                    <InfoItem
+                      icon={<User className="h-4 w-4" />}
+                      label="Contact"
+                      value={
+                        <span>
+                          {company.contact_name}
+                          {company.job_title && (
+                            <span className="ml-1 text-muted">
+                              &middot; {company.job_title}
+                            </span>
+                          )}
+                        </span>
+                      }
+                    />
+                  )}
+                  {!company.contact_name && company.job_title && (
+                    <InfoItem
+                      icon={<User className="h-4 w-4" />}
+                      label="Title"
+                      value={company.job_title}
+                    />
+                  )}
+                  {company.linkedin_profile_url && (
+                    <InfoItem
+                      icon={<Linkedin className="h-4 w-4" />}
+                      label="LinkedIn"
+                      value={
+                        <a
+                          href={
+                            company.linkedin_profile_url.startsWith("http")
+                              ? company.linkedin_profile_url
+                              : `https://${company.linkedin_profile_url}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-primary-light hover:underline"
+                        >
+                          {company.contact_name || "LinkedIn Profile"}
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      }
+                    />
+                  )}
+                </div>
+              </Section>
+            )}
 
           {/* 4. Product Details — Bullet lists */}
           {productDetails.length > 0 && (

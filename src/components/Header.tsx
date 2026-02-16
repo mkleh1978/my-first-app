@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useFavorites } from "@/lib/favorites-context";
-import { LogOut, Star } from "lucide-react";
+import { LogOut, Shield, Star } from "lucide-react";
 
 interface HeaderProps {
   totalCount?: number;
@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header({ totalCount }: HeaderProps) {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const { count } = useFavorites();
 
   return (
@@ -59,6 +59,19 @@ export default function Header({ totalCount }: HeaderProps) {
               <Star className="h-3.5 w-3.5" />
               Watchlist{count > 0 && ` (${count})`}
             </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  pathname === "/admin"
+                    ? "bg-white/15 text-white"
+                    : "text-white/60 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <Shield className="h-3.5 w-3.5" />
+                Admin
+              </Link>
+            )}
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -83,6 +96,11 @@ export default function Header({ totalCount }: HeaderProps) {
           {user && (
             <div className="flex items-center gap-3 border-l border-white/20 pl-4">
               <span className="text-sm text-white/60">{user.email}</span>
+              {isAdmin && (
+                <span className="rounded bg-orange/20 px-1.5 py-0.5 text-xs font-semibold text-orange-light">
+                  Admin
+                </span>
+              )}
               <button
                 onClick={signOut}
                 className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-white/50 transition-colors hover:bg-white/10 hover:text-white"

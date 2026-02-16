@@ -100,6 +100,7 @@ export default function Home() {
          core_value_proposition, problem_solved, key_features,
          competitive_advantage_usp, integration_capabilities, top_competitors,
          analysis_status, member,
+         contact_name, job_title, linkedin_profile_url,
          funding_2010, funding_2011, funding_2012, funding_2013,
          funding_2014, funding_2015, funding_2016, funding_2017,
          funding_2018, funding_2019, funding_2020, funding_2021,
