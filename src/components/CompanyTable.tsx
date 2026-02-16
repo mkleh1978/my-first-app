@@ -2,9 +2,7 @@
 
 import { FinTechCompany, SortColumn, SortConfig } from "@/types/fintech";
 import { countryToIso } from "@/lib/country-flags";
-import { useAuth } from "@/lib/auth-context";
 import StarButton from "@/components/StarButton";
-import { ExternalLink } from "lucide-react";
 
 interface CompanyTableProps {
   companies: FinTechCompany[];
@@ -119,7 +117,6 @@ export default function CompanyTable({
   error,
   onRetry,
 }: CompanyTableProps) {
-  const { isAdmin } = useAuth();
   if (loading) {
     return (
       <div className="overflow-x-auto rounded-lg border border-border">
@@ -222,13 +219,6 @@ export default function CompanyTable({
             <th className="px-4 py-3 font-semibold text-foreground">Kategorie</th>
             <th className="px-4 py-3 font-semibold text-foreground">Unterkategorie</th>
             <SortableHeader label="Land" column="country" sort={sort} onSortChange={onSortChange} />
-            {isAdmin && (
-              <>
-                <th className="px-4 py-3 font-semibold text-foreground">Kontakt</th>
-                <th className="px-4 py-3 font-semibold text-foreground">Titel</th>
-                <th className="px-4 py-3 font-semibold text-foreground">LinkedIn</th>
-              </>
-            )}
             <SortableHeader label="Gegr." column="founded_year" sort={sort} onSortChange={onSortChange} />
             <SortableHeader label="Finanzierung" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
             <SortableHeader label="Mitarbeiter" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
@@ -284,35 +274,6 @@ export default function CompanyTable({
                   "-"
                 )}
               </td>
-              {isAdmin && (
-                <>
-                  <td className="px-4 py-3 text-muted">
-                    {company.contact_name ?? "-"}
-                  </td>
-                  <td className="px-4 py-3 text-muted">
-                    {company.job_title ?? "-"}
-                  </td>
-                  <td className="px-4 py-3">
-                    {company.linkedin_profile_url ? (
-                      <a
-                        href={
-                          company.linkedin_profile_url.startsWith("http")
-                            ? company.linkedin_profile_url
-                            : `https://${company.linkedin_profile_url}`
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1 text-primary-light hover:underline"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    ) : (
-                      <span className="text-muted">-</span>
-                    )}
-                  </td>
-                </>
-              )}
               <td className="px-4 py-3 text-muted">
                 {formatYear(company.founded_year)}
               </td>
