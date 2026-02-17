@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { FundingTimelinePoint } from "@/types/reporting";
 import { getSegmentColor, formatFundingValue } from "@/lib/category-colors";
-import { useChartColors, tooltipStyle } from "@/lib/chart-theme";
+import { useChartColors, tooltipStyle, tooltipLabelStyle, tooltipItemStyle } from "@/lib/chart-theme";
 
 interface FundingTimelineChartProps {
   timeline: FundingTimelinePoint[];
@@ -79,6 +79,8 @@ export default function FundingTimelineChart({
               name,
             ]}
             contentStyle={tooltipStyle(colors)}
+            labelStyle={tooltipLabelStyle(colors)}
+            itemStyle={tooltipItemStyle(colors)}
             cursor={{ fill: "rgba(0,107,107,0.05)" }}
           />
           <Legend

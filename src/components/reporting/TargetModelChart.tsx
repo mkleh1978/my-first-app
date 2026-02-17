@@ -3,7 +3,7 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { DistributionItem } from "@/types/reporting";
 import { TARGET_MODEL_COLORS } from "@/lib/category-colors";
-import { useChartColors, tooltipStyle } from "@/lib/chart-theme";
+import { useChartColors, tooltipStyle, tooltipLabelStyle, tooltipItemStyle } from "@/lib/chart-theme";
 
 interface TargetModelChartProps {
   items: DistributionItem[];
@@ -60,6 +60,8 @@ export default function TargetModelChart({ items }: TargetModelChartProps) {
                 name,
               ]}
               contentStyle={tooltipStyle(colors)}
+              labelStyle={tooltipLabelStyle(colors)}
+              itemStyle={tooltipItemStyle(colors)}
             />
           </PieChart>
         </ResponsiveContainer>

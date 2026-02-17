@@ -11,6 +11,7 @@
   --surface: #FFFFFF;
   --border: #E0E1E5;
   --muted: #5A5670;
+  --tooltip-text: #170245;
 }
 
 @theme inline {
@@ -42,6 +43,7 @@
     --surface: #1A1040;
     --border: #2D1B69;
     --muted: #9B94B3;
+    --tooltip-text: #FFFFFF;
   }
 }
 

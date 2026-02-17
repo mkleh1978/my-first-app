@@ -5,6 +5,7 @@ interface ChartColors {
   muted: string;
   surface: string;
   border: string;
+  tooltipText: string;
 }
 
 const FALLBACK: ChartColors = {
@@ -12,6 +13,7 @@ const FALLBACK: ChartColors = {
   muted: "#5A5670",
   surface: "#FFFFFF",
   border: "#E0E1E5",
+  tooltipText: "#170245",
 };
 
 function readCssVar(name: string): string {
@@ -30,6 +32,7 @@ export function useChartColors(): ChartColors {
         muted: readCssVar("--muted") || FALLBACK.muted,
         surface: readCssVar("--surface") || FALLBACK.surface,
         border: readCssVar("--border") || FALLBACK.border,
+        tooltipText: readCssVar("--tooltip-text") || FALLBACK.tooltipText,
       });
     }
     read();
@@ -45,10 +48,23 @@ export function useChartColors(): ChartColors {
 export function tooltipStyle(c: ChartColors): React.CSSProperties {
   return {
     backgroundColor: c.surface,
-    color: c.foreground,
+    color: c.tooltipText,
     border: `1px solid ${c.border}`,
     borderRadius: "8px",
     fontSize: "13px",
     fontWeight: 500,
+  };
+}
+
+export function tooltipLabelStyle(c: ChartColors): React.CSSProperties {
+  return {
+    color: c.tooltipText,
+    fontWeight: 600,
+  };
+}
+
+export function tooltipItemStyle(c: ChartColors): React.CSSProperties {
+  return {
+    color: c.tooltipText,
   };
 }

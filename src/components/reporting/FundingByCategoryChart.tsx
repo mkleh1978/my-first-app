@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { CategoryStat } from "@/types/reporting";
 import { getSegmentColor, formatFundingValue } from "@/lib/category-colors";
-import { useChartColors, tooltipStyle } from "@/lib/chart-theme";
+import { useChartColors, tooltipStyle, tooltipLabelStyle, tooltipItemStyle } from "@/lib/chart-theme";
 
 interface FundingByCategoryChartProps {
   stats: CategoryStat[];
@@ -74,6 +74,8 @@ export default function FundingByCategoryChart({
               payload?.[0]?.payload?.fullName ?? ""
             }
             contentStyle={tooltipStyle(colors)}
+            labelStyle={tooltipLabelStyle(colors)}
+            itemStyle={tooltipItemStyle(colors)}
             cursor={{ fill: "rgba(0,107,107,0.05)" }}
           />
           <Bar dataKey="value" radius={[4, 4, 0, 0]}>
