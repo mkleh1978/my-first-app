@@ -79,14 +79,27 @@ export default function Home() {
       return;
     }
     async function loadSubcategories() {
+      // Query all companies where the selected category appears in any of the 3 category columns
       const { data } = await supabase
         .from("FinWell_data")
-        .select("subcategory_1")
-        .eq("category_1", filters.category)
-        .not("subcategory_1", "is", null)
-        .order("subcategory_1");
+        .select("category_1, subcategory_1, category_2, subcategory_2, category_3, subcategory_3")
+        .or(`category_1.eq.${filters.category},category_2.eq.${filters.category},category_3.eq.${filters.category}`);
+
       if (data) {
-        const unique = [...new Set(data.map((r: { subcategory_1: string }) => r.subcategory_1))];
+        // Collect all subcategories where the category matches
+        const subcats = new Set<string>();
+        data.forEach((row: any) => {
+          if (row.category_1 === filters.category && row.subcategory_1) {
+            subcats.add(row.subcategory_1);
+          }
+          if (row.category_2 === filters.category && row.subcategory_2) {
+            subcats.add(row.subcategory_2);
+          }
+          if (row.category_3 === filters.category && row.subcategory_3) {
+            subcats.add(row.subcategory_3);
+          }
+        });
+        const unique = [...subcats].sort();
         setSubcategories(unique);
       }
     }
