@@ -58,7 +58,7 @@ export default function FundingTimelineChart({
       <ResponsiveContainer width="100%" height={320}>
         <BarChart
           data={pivoted}
-          margin={{ top: 8, right: 8, left: 8, bottom: 0 }}
+          margin={{ top: 10, right: 20, bottom: 40, left: 50 }}
         >
           <XAxis
             dataKey="year"

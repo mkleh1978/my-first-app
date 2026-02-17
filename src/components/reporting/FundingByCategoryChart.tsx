@@ -33,7 +33,7 @@ export default function FundingByCategoryChart({
   const data = stats
     .filter((s) => s.total_funding_sum > 0)
     .map((s, i) => ({
-      name: s.segment.length > 20 ? s.segment.slice(0, 18) + "..." : s.segment,
+      name: s.segment.length > 40 ? s.segment.slice(0, 38) + "..." : s.segment,
       fullName: s.segment,
       value: s.total_funding_sum,
       color: getSegmentColor(s.segment, i),
@@ -47,24 +47,23 @@ export default function FundingByCategoryChart({
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={data}
-          layout="horizontal"
-          margin={{ top: 8, right: 8, left: 8, bottom: 65 }}
+          layout="vertical"
+          margin={{ top: 10, right: 20, bottom: 30, left: 150 }}
         >
           <XAxis
-            dataKey="name"
-            tick={{ fontSize: 11, fill: colors.muted }}
-            tickLine={false}
-            axisLine={{ stroke: colors.border }}
-            angle={-45}
-            textAnchor="end"
-            height={80}
-          />
-          <YAxis
+            type="number"
             tickFormatter={(v) => formatFundingValue(v)}
             tick={{ fontSize: 11, fill: colors.muted }}
             tickLine={false}
+            axisLine={{ stroke: colors.border }}
+          />
+          <YAxis
+            dataKey="name"
+            type="category"
+            tick={{ fontSize: 12, fill: colors.foreground }}
+            tickLine={false}
             axisLine={false}
-            width={65}
+            width={140}
           />
           <Tooltip
             formatter={(value) => [

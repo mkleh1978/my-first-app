@@ -37,15 +37,15 @@ export default function StatusDistributionChart({
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
         Company Status
       </h3>
-      <div className="flex items-center gap-4">
-        <ResponsiveContainer width={140} height={140}>
+      <div className="flex items-center gap-4" style={{ minHeight: '250px' }}>
+        <ResponsiveContainer width={180} height={180}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={35}
-              outerRadius={65}
+              innerRadius="35%"
+              outerRadius="65%"
               paddingAngle={2}
               dataKey="value"
               stroke="none"
