@@ -44,20 +44,20 @@ export default function FundingByCategoryChart({
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
         Total Funding by Segment
       </h3>
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={data}
           layout="horizontal"
-          margin={{ top: 8, right: 8, left: 8, bottom: 40 }}
+          margin={{ top: 8, right: 8, left: 8, bottom: 65 }}
         >
           <XAxis
             dataKey="name"
             tick={{ fontSize: 11, fill: colors.muted }}
             tickLine={false}
             axisLine={{ stroke: colors.border }}
-            angle={-20}
+            angle={-45}
             textAnchor="end"
-            height={60}
+            height={80}
           />
           <YAxis
             tickFormatter={(v) => formatFundingValue(v)}
