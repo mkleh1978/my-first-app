@@ -221,7 +221,6 @@ export default function CompanyTable({
             <SortableHeader label="Country" column="country" sort={sort} onSortChange={onSortChange} />
             <SortableHeader label="Founded" column="founded_year" sort={sort} onSortChange={onSortChange} />
             <SortableHeader label="Funding" column="total_funding" sort={sort} onSortChange={onSortChange} className="text-right" />
-            <SortableHeader label="Employees" column="number_of_employees" sort={sort} onSortChange={onSortChange} />
             <th className="px-4 py-3 font-semibold text-foreground">Status</th>
           </tr>
         </thead>
@@ -279,11 +278,6 @@ export default function CompanyTable({
               </td>
               <td className="px-4 py-3 text-right font-mono text-sm">
                 {formatFunding(company.total_funding)}
-              </td>
-              <td className="px-4 py-3 text-muted">
-                {company.number_of_employees
-                  ? Math.round(company.number_of_employees).toLocaleString()
-                  : "-"}
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={company.company_status} />
