@@ -77,7 +77,7 @@ export default function Header({ totalCount }: HeaderProps) {
         <div className="flex items-center gap-8">
           <div className="min-w-0">
             <h1 className="truncate text-xl font-bold tracking-tight">
-              European FinTech Database
+              European FinWell Database
             </h1>
             <p className="text-sm text-white/60">
               House of Finance & Tech Berlin

@@ -8,7 +8,7 @@ export default function AuthLayout({
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-white">
-            European FinTech Database
+            European FinWell Database
           </h1>
           <p className="mt-1 text-sm text-white/60">
             House of Finance & Tech Berlin

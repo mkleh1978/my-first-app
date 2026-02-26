@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "European FinTech Database | HoFT Berlin",
+  title: "European FinWell Database | HoFT Berlin",
   description:
     "Search, filter and compare over 10,000 European FinTech companies. A HoFT (House of Finance & Tech Berlin) project.",
 };
