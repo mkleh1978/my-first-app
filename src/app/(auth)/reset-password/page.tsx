@@ -8,14 +8,22 @@ export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError(null);
     setLoading(true);
 
-    await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback`,
     });
+
+    if (error && !error.message.includes("not found")) {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+      return;
+    }
 
     // Always show success — don't reveal whether email exists
     setSent(true);
@@ -69,6 +77,12 @@ export default function ResetPasswordPage() {
         Enter your email address and we&apos;ll send you a reset link.
       </p>
 
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          {error}
+        </div>
+      )}
+
       <div>
         <label
           htmlFor="email"
@@ -83,7 +97,7 @@ export default function ResetPasswordPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
-          placeholder="name@example.com"
+          placeholder="name@hoft.berlin"
         />
       </div>
 

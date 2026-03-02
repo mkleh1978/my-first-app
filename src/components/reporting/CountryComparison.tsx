@@ -21,10 +21,10 @@ import { X } from "lucide-react";
 const CHART_COLORS = ["#006B6B", "#EA5A3C", "#170245", "#10B981", "#F59E0B"];
 
 function formatFunding(value: number): string {
-  if (value >= 1_000_000_000) return `€${(value / 1_000_000_000).toFixed(1)}B`;
-  if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `€${(value / 1_000).toFixed(0)}K`;
-  return `€${value.toFixed(0)}`;
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(1)}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
+  return `$${value.toFixed(0)}`;
 }
 
 type SortKey = "company_count" | "total_funding_sum" | "total_funding_avg" | "avg_founded_year";

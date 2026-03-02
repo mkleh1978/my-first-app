@@ -168,7 +168,7 @@ export default function CompanyDetailModal({
             </div>
             {company.domain && (
               <a
-                href={`https://${company.domain}`}
+                href={company.domain.startsWith("http") ? company.domain : `https://${company.domain}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 inline-flex items-center gap-1 text-sm text-primary-light hover:underline"

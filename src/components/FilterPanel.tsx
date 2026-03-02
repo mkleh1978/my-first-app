@@ -163,7 +163,7 @@ export default function FilterPanel({
 
         {/* Count */}
         <span className="ml-auto text-sm text-muted">
-          {filteredCount.toLocaleString()} von {totalCount.toLocaleString()}{" "}
+          {filteredCount.toLocaleString()} of {totalCount.toLocaleString()}{" "}
           Companies
         </span>
       </div>

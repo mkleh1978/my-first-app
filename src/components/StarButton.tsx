@@ -19,7 +19,8 @@ export default function StarButton({ companyId, size = 18 }: StarButtonProps) {
         toggleFavorite(companyId);
       }}
       className="shrink-0 transition-transform hover:scale-110"
-      title={active ? "Aus Watchlist entfernen" : "Zur Watchlist hinzufügen"}
+      title={active ? "Remove from Watchlist" : "Add to Watchlist"}
+      aria-label={active ? "Remove from Watchlist" : "Add to Watchlist"}
     >
       <Star
         size={size}

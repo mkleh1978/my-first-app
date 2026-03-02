@@ -21,7 +21,7 @@ import CountryComparison from "@/components/reporting/CountryComparison";
 
 export default function ReportingPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <ReportingContent />
     </Suspense>
   );

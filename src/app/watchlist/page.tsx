@@ -117,6 +117,17 @@ export default function WatchlistPage() {
     loadWatchlist();
   }, [favoriteIds, favLoading]);
 
+  // Close modal on Escape key
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setSelectedCompany(null);
+    }
+    if (selectedCompany) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [selectedCompany]);
+
   function handleExport() {
     if (companies.length === 0) return;
 
