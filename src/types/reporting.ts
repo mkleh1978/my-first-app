@@ -21,3 +21,12 @@ export interface KeywordItem {
   keyword: string;
   count: number;
 }
+
+export interface CountryStat {
+  country: string;
+  company_count: number;
+  total_funding_sum: number;
+  total_funding_avg: number;
+  top_category: string;
+  avg_founded_year: number;
+}

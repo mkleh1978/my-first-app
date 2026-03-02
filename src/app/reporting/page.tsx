@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { supabase } from "@/lib/supabase";
 import {
   CategoryStat,
@@ -8,6 +8,7 @@ import {
   DistributionItem,
   KeywordItem,
 } from "@/types/reporting";
+import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import CategoryKpiCards from "@/components/reporting/CategoryKpiCards";
 import FundingByCategoryChart from "@/components/reporting/FundingByCategoryChart";
@@ -16,8 +17,28 @@ import StatusDistributionChart from "@/components/reporting/StatusDistributionCh
 import TargetModelChart from "@/components/reporting/TargetModelChart";
 import TopCountriesList from "@/components/reporting/TopCountriesList";
 import TopKeywordsCloud from "@/components/reporting/TopKeywordsCloud";
+import CountryComparison from "@/components/reporting/CountryComparison";
 
 export default function ReportingPage() {
+  return (
+    <Suspense>
+      <ReportingContent />
+    </Suspense>
+  );
+}
+
+function ReportingContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const activeTab = searchParams.get("tab") === "countries" ? "countries" : "overview";
+
+  function setTab(tab: "overview" | "countries") {
+    const params = new URLSearchParams(searchParams.toString());
+    if (tab === "overview") params.delete("tab");
+    else params.set("tab", tab);
+    router.replace(`/reporting${params.toString() ? `?${params}` : ""}`);
+  }
+
   // 3-level drill-down state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
@@ -142,6 +163,36 @@ export default function ReportingPage() {
       <Header />
 
       <main className="mx-auto max-w-7xl px-6 py-6">
+        {/* Tab Navigation */}
+        <div className="mb-6 flex items-center gap-1 rounded-lg border border-border bg-surface p-1">
+          <button
+            onClick={() => setTab("overview")}
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === "overview"
+                ? "bg-teal text-white"
+                : "text-muted hover:bg-border hover:text-foreground"
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setTab("countries")}
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === "countries"
+                ? "bg-teal text-white"
+                : "text-muted hover:bg-border hover:text-foreground"
+            }`}
+          >
+            Country Comparison
+          </button>
+        </div>
+
+        {/* Country Comparison Tab */}
+        {activeTab === "countries" && <CountryComparison />}
+
+        {/* Overview Tab */}
+        {activeTab === "overview" && (
+        <>
         {/* Page title + breadcrumb */}
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -254,6 +305,8 @@ export default function ReportingPage() {
             {/* Keywords */}
             <TopKeywordsCloud keywords={keywords} />
           </div>
+        )}
+        </>
         )}
       </main>
     </div>
