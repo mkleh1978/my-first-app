@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -75,14 +76,21 @@ export default function Header({ totalCount }: HeaderProps) {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         {/* Left: Logo + Desktop Nav */}
         <div className="flex items-center gap-8">
-          <div className="min-w-0">
-            <h1 className="truncate text-xl font-bold tracking-tight">
-              European FinWell Database
-            </h1>
-            <p className="text-sm text-white/60">
-              House of Finance & Tech Berlin
-            </p>
-          </div>
+          <Link href="/" className="flex items-center gap-4">
+            <Image
+              src="/hoft-logo-white.svg"
+              alt="HoFT Logo"
+              width={120}
+              height={30}
+              className="h-8 w-auto"
+              priority
+            />
+            <div className="hidden min-w-0 sm:block">
+              <h1 className="truncate text-xl font-bold tracking-tight">
+                European FinWell Database
+              </h1>
+            </div>
+          </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks}
           </nav>
