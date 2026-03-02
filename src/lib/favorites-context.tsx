@@ -14,6 +14,8 @@ interface FavoritesContextType {
   favoriteIds: Set<string>;
   toggleFavorite: (companyId: string) => void;
   bulkAddFavorites: (companyIds: string[]) => Promise<number>;
+  bulkRemoveFavorites: (companyIds: string[]) => Promise<void>;
+  clearAll: () => Promise<void>;
   isFavorite: (companyId: string) => boolean;
   count: number;
   loading: boolean;
@@ -23,6 +25,8 @@ const FavoritesContext = createContext<FavoritesContextType>({
   favoriteIds: new Set(),
   toggleFavorite: () => {},
   bulkAddFavorites: async () => 0,
+  bulkRemoveFavorites: async () => {},
+  clearAll: async () => {},
   isFavorite: () => false,
   count: 0,
   loading: true,
@@ -151,6 +155,52 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     [user, favoriteIds]
   );
 
+  const bulkRemoveFavorites = useCallback(
+    async (companyIds: string[]) => {
+      if (!user || companyIds.length === 0) return;
+
+      const previousIds = new Set(favoriteIds);
+
+      // Optimistic update
+      setFavoriteIds((prev) => {
+        const next = new Set(prev);
+        for (const id of companyIds) next.delete(id);
+        return next;
+      });
+
+      const { error } = await supabase
+        .from("watchlist")
+        .delete()
+        .eq("user_id", user.id)
+        .in("company_id", companyIds);
+
+      if (error) {
+        setFavoriteIds(previousIds);
+        throw new Error(error.message);
+      }
+    },
+    [user, favoriteIds]
+  );
+
+  const clearAll = useCallback(async () => {
+    if (!user || favoriteIds.size === 0) return;
+
+    const previousIds = new Set(favoriteIds);
+
+    // Optimistic update
+    setFavoriteIds(new Set());
+
+    const { error } = await supabase
+      .from("watchlist")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (error) {
+      setFavoriteIds(previousIds);
+      throw new Error(error.message);
+    }
+  }, [user, favoriteIds]);
+
   const isFavorite = useCallback(
     (companyId: string) => favoriteIds.has(companyId),
     [favoriteIds]
@@ -162,6 +212,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         favoriteIds,
         toggleFavorite,
         bulkAddFavorites,
+        bulkRemoveFavorites,
+        clearAll,
         isFavorite,
         count: favoriteIds.size,
         loading,

@@ -9,9 +9,44 @@ import Header from "@/components/Header";
 import StarButton from "@/components/StarButton";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
 import { useAuth } from "@/lib/auth-context";
-import { Download, ExternalLink, Star } from "lucide-react";
+import { Download, ExternalLink, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import * as XLSX from "xlsx";
+
+function ConfirmDialog({
+  title,
+  message,
+  onConfirm,
+  onCancel,
+}: {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="mx-4 w-full max-w-sm rounded-xl border border-border bg-surface p-6 shadow-xl">
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+        <p className="mt-2 text-sm text-muted">{message}</p>
+        <div className="mt-5 flex justify-end gap-3">
+          <button
+            onClick={onCancel}
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-border"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function StatusBadge({ status }: { status: string | null }) {
   if (!status) return <span className="text-muted">-</span>;
@@ -44,11 +79,17 @@ function formatYear(value: number | null): string {
 
 export default function WatchlistPage() {
   const { isAdmin } = useAuth();
-  const { favoriteIds, count, loading: favLoading } = useFavorites();
+  const { favoriteIds, count, bulkRemoveFavorites, clearAll, loading: favLoading } = useFavorites();
   const [companies, setCompanies] = useState<FinTechCompany[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCompany, setSelectedCompany] =
     useState<FinTechCompany | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [confirmAction, setConfirmAction] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   // Load companies matching favorite IDs
   useEffect(() => {
@@ -122,6 +163,48 @@ export default function WatchlistPage() {
     URL.revokeObjectURL(link.href);
   }
 
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === companies.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(companies.map((c) => c.id)));
+    }
+  }
+
+  function handleRemoveSelected() {
+    if (selectedIds.size === 0) return;
+    setConfirmAction({
+      title: "Remove Selected",
+      message: `Remove ${selectedIds.size} ${selectedIds.size === 1 ? "company" : "companies"} from your watchlist?`,
+      onConfirm: async () => {
+        await bulkRemoveFavorites([...selectedIds]);
+        setSelectedIds(new Set());
+        setConfirmAction(null);
+      },
+    });
+  }
+
+  function handleClearAll() {
+    setConfirmAction({
+      title: "Clear Watchlist",
+      message: `Remove all ${count} ${count === 1 ? "company" : "companies"} from your watchlist?`,
+      onConfirm: async () => {
+        await clearAll();
+        setSelectedIds(new Set());
+        setConfirmAction(null);
+      },
+    });
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -136,7 +219,25 @@ export default function WatchlistPage() {
               watchlist
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {selectedIds.size > 0 && (
+              <button
+                onClick={handleRemoveSelected}
+                className="flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition-colors hover:bg-red-100 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+              >
+                <Trash2 className="h-4 w-4" />
+                Remove Selected ({selectedIds.size})
+              </button>
+            )}
+            {companies.length > 0 && selectedIds.size === 0 && (
+              <button
+                onClick={handleClearAll}
+                className="flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-foreground"
+              >
+                <Trash2 className="h-4 w-4" />
+                Clear All
+              </button>
+            )}
             {isAdmin && (
               <div className="flex flex-col items-end gap-1">
                 <button
@@ -232,6 +333,14 @@ export default function WatchlistPage() {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface">
+                  <th className="w-10 px-3 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.size === companies.length && companies.length > 0}
+                      onChange={toggleSelectAll}
+                      className="h-4 w-4 rounded border-border accent-teal"
+                    />
+                  </th>
                   <th className="w-10 px-3 py-3" />
                   <th className="px-4 py-3 font-semibold text-foreground">
                     Company
@@ -267,6 +376,14 @@ export default function WatchlistPage() {
                     onClick={() => setSelectedCompany(company)}
                     className="cursor-pointer border-b border-border transition-colors hover:bg-teal/5 last:border-b-0"
                   >
+                    <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(company.id)}
+                        onChange={() => toggleSelect(company.id)}
+                        className="h-4 w-4 rounded border-border accent-teal"
+                      />
+                    </td>
                     <td className="px-3 py-3">
                       <StarButton companyId={company.id} />
                     </td>
@@ -347,6 +464,15 @@ export default function WatchlistPage() {
         <CompanyDetailModal
           company={selectedCompany}
           onClose={() => setSelectedCompany(null)}
+        />
+      )}
+
+      {confirmAction && (
+        <ConfirmDialog
+          title={confirmAction.title}
+          message={confirmAction.message}
+          onConfirm={confirmAction.onConfirm}
+          onCancel={() => setConfirmAction(null)}
         />
       )}
     </div>
